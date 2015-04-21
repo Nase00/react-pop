@@ -5,7 +5,7 @@ var React = require('react')
 		, Pop = require('./react-pop.jsx')
 
 React.render(
-  React.createElement(Pop, null, 
+  React.createElement(Pop, {labelOpen: "FAQ", labelClose: "FAQ close"}, 
   	React.createElement("div", null, 
 			"Vestibulum interdum dapibus iaculis. Pellentesque a condimentum erat, non tempus erat. Sed pellentesque, arcu eget tristique facilisis, sapien ligula pharetra tellus, at malesuada nisl diam nec purus. Morbi aliquam ante erat, nec hendrerit enim malesuada vel. Sed in lorem quis enim aliquam consectetur eu nec leo. Nulla facilisi. Aenean malesuada risus sed tortor aliquam maximus."
 		)
@@ -21796,10 +21796,14 @@ var Toggle = React.createClass({displayName: "Toggle",
 var Pop = React.createClass({displayName: "Pop",
     propTypes: {
       opened: React.PropTypes.bool
+      , labelOpen: React.PropTypes.string
+      , labelClose: React.PropTypes.string
     }
     , getDefaultProps: function() {
       return {
         opened: false
+        , labelOpen: "Toggle"
+        , labelClose: "Toggle"
       }
     }
     , getInitialState: function() {
@@ -21817,12 +21821,13 @@ var Pop = React.createClass({displayName: "Pop",
       this.setState({opened: !this.state.opened})
     }
     , render: function() {
+      console.log(this.props)
       if (this.state.opened) {
         var content = this.props.children
-            , label = "Close"
+            , label = this.props.labelClose
       } else {
         var content = null
-            , label = "Open"
+            , label = this.props.labelOpen
       }
       return (
         React.createElement("div", {className: "react-pop-wrapper"}, 

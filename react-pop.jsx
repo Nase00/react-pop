@@ -16,10 +16,14 @@ var Toggle = React.createClass({
 var Pop = React.createClass({
     propTypes: {
       opened: React.PropTypes.bool
+      , labelOpen: React.PropTypes.string
+      , labelClose: React.PropTypes.string
     }
     , getDefaultProps: function() {
       return {
         opened: false
+        , labelOpen: "Toggle"
+        , labelClose: "Toggle"
       }
     }
     , getInitialState: function() {
@@ -37,12 +41,13 @@ var Pop = React.createClass({
       this.setState({opened: !this.state.opened})
     }
     , render: function() {
+      console.log(this.props)
       if (this.state.opened) {
         var content = this.props.children
-            , label = "Close"
+            , label = this.props.labelClose
       } else {
         var content = null
-            , label = "Open"
+            , label = this.props.labelOpen
       }
       return (
         <div className="react-pop-wrapper">

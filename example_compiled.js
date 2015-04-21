@@ -21825,17 +21825,29 @@ var Pop = React.createClass({displayName: "Pop",
       this.setState({opened: !this.state.opened})
     }
     , render: function() {
-      var xOutDivStyle = {
-        width: "100%"
-        , textAlign: "right"
-      }
-      , xOutStyle = {
-        fontFamily: "Helvetica"
-        , textDecoration: "none"
-      }
-      if (this.state.opened) {
-        var content =
-                React.createElement("div", null, 
+        var contentStyle = {
+            position: "Absolute"
+            , margin: "0 auto auto"
+            , padding: "10px"
+            , right: 0
+            , left: 0
+            , width: "50%"
+            , background: "#F8F8FF"
+            , borderRadius: "6px"
+            , boxShadow: "1px 1px 2px #bfbfbf"
+          }
+          , xOutDivStyle = {
+            width: "auto"
+            , textAlign: "right"
+          }
+          , xOutStyle = {
+            fontFamily: "Helvetica"
+            , textDecoration: "none"
+          }
+        if (this.state.opened) {
+          var content =
+              React.createElement("div", null, 
+                React.createElement("div", {style: contentStyle, className: "react-pop-content"}, 
                   React.createElement("div", {className: "react-pop-xout", style: xOutDivStyle}, 
                     React.createElement("a", {className: "react-pop-xout", style: xOutStyle, onClick: this.toggle, href: "#"}, 
                       this.props.xOut
@@ -21843,6 +21855,7 @@ var Pop = React.createClass({displayName: "Pop",
                   ), 
                   this.props.children
                 )
+              )
             , label = this.props.labelClose
       } else {
         var content = null
@@ -21851,13 +21864,11 @@ var Pop = React.createClass({displayName: "Pop",
       return (
         React.createElement("div", {className: "react-pop-wrapper"}, 
           React.createElement(Toggle, {label: label, on_click: this.toggle}), 
-          React.createElement("div", {className: "react-pop-content"}, 
-            this.props.transitions ?
-              React.createElement(ReactCSSTransitionGroup, {transitionName: "react-pop-content"}, 
-                content
-              )
-            : content
-          )
+          this.props.transitions ?
+            React.createElement(ReactCSSTransitionGroup, {transitionName: "react-pop-content"}, 
+              content
+            )
+          : content
         )
       )
     }

@@ -34,4 +34,9 @@ div.react-pop-xout {
 }
 a.react-pop-xout {
 }
+
+/* Override default styling for popup content */
+div.react-pop-content {
+	
+}
 ```

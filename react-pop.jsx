@@ -45,17 +45,29 @@ var Pop = React.createClass({
       this.setState({opened: !this.state.opened})
     }
     , render: function() {
-      var xOutDivStyle = {
-        width: "100%"
-        , textAlign: "right"
-      }
-      , xOutStyle = {
-        fontFamily: "Helvetica"
-        , textDecoration: "none"
-      }
-      if (this.state.opened) {
-        var content =
-                <div>
+        var contentStyle = {
+            position: "Absolute"
+            , margin: "0 auto auto"
+            , padding: "10px"
+            , right: 0
+            , left: 0
+            , width: "50%"
+            , background: "#F8F8FF"
+            , borderRadius: "6px"
+            , boxShadow: "1px 1px 2px #bfbfbf"
+          }
+          , xOutDivStyle = {
+            width: "auto"
+            , textAlign: "right"
+          }
+          , xOutStyle = {
+            fontFamily: "Helvetica"
+            , textDecoration: "none"
+          }
+        if (this.state.opened) {
+          var content =
+              <div>
+                <div style={contentStyle} className="react-pop-content">
                   <div className="react-pop-xout" style={xOutDivStyle}>
                     <a className="react-pop-xout" style={xOutStyle} onClick={this.toggle} href="#">
                       {this.props.xOut}
@@ -63,6 +75,7 @@ var Pop = React.createClass({
                   </div>
                   {this.props.children}
                 </div>
+              </div>
             , label = this.props.labelClose
       } else {
         var content = null
@@ -71,13 +84,11 @@ var Pop = React.createClass({
       return (
         <div className="react-pop-wrapper">
           <Toggle label={label} on_click={this.toggle} />
-          <div className="react-pop-content">
-            {this.props.transitions ?
-              <ReactCSSTransitionGroup transitionName="react-pop-content">
-                {content}
-              </ReactCSSTransitionGroup>
-            : content}
-          </div>
+          {this.props.transitions ?
+            <ReactCSSTransitionGroup transitionName="react-pop-content">
+              {content}
+            </ReactCSSTransitionGroup>
+          : content}
         </div>
       )
     }

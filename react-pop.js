@@ -3,151 +3,95 @@ var React = require('react/addons')
 
 React.initializeTouchEvents(true)
 
-var Arrow = React.createClass({displayName: "Arrow",
+var Toggle = React.createClass({displayName: "Toggle",
     render: function() {
       return (
-        React.createElement("div", {className: "react-shift-nav-arrow"}, 
-          React.createElement("a", {href: "#", onClick: this.props.on_click}, 
-            this.props.label
-          )
+        React.createElement("a", {className: "react-pop-toggle", href: "#", onClick: this.props.on_click}, 
+          this.props.label
         )
       )
     }
   })
 
-var Shift = React.createClass({displayName: "Shift",
+var Pop = React.createClass({displayName: "Pop",
     propTypes: {
-      arrowLabels: React.PropTypes.object
-      , arrowLabels: React.PropTypes.shape({
-        next: React.PropTypes.string
-        , previous: React.PropTypes.string
-      })
-      , fastLinks: React.PropTypes.object
+      opened: React.PropTypes.bool
+      , labelOpen: React.PropTypes.string
+      , labelClose: React.PropTypes.string
+      , xOut: React.PropTypes.string
       , transitions: React.PropTypes.bool
-      , scrollable: React.PropTypes.bool
     }
     , getDefaultProps: function() {
       return {
-        arrowLabels: {
-          next: "Next page"
-          , previous: "Previous page"
-        }
-        , fastLinks: {}
-        , scrollable: true
+        opened: false
+        , labelOpen: "Toggle"
+        , labelClose: "Toggle"
+        , xOut: "Close"
+        , transitions: false
       }
     }
     , getInitialState: function() {
       return {
         mounted: false
-        , page: 0
-        , pageCount: 0
+        , opened: false
       }
     }
     , componentDidMount: function() {
       this.setState({
         mounted: true
-        , pageCount: this.props.children.length - 1
-        , scrollable: this.props.scrollable
       })
     }
-    , next: function() {
-      if (this.state.page === this.state.pageCount) {
-        null
-      } else {
-        this.setState({page: this.state.page + 1})
-      }
-    }
-    , previous: function() {
-      if (this.state.page === 0) {
-        null
-      } else {
-        this.setState({page: this.state.page - 1})
-      }
-    }
-    , setPage: function(n) {
-      this.setState({page: n})
-    }
-    , handleWheel: function(e) {
-      if (this.props.scrollable) {
-        if (e.deltaY > 0) {
-          this.next()
-        } else {
-          this.previous()
-        }
-      }
-    }
-    , handleTouch: function(e) {
-      console.log(e.changedTouches[0].pageX)
+    , toggle: function() {
+      this.setState({opened: !this.state.opened})
     }
     , render: function() {
-      var self = this
-          , fastLinks = this.props.fastLinks
-          , paginationArray = Array
-              .apply(null, {length: this.state.pageCount + 1})
-              .map(Number.call, Number)
-          , filler =
-            React.createElement("div", {
-              className: "react-shift-nav-arrow"}, 
-              "\u00a0"
-            )
-          , leftArrow =
-            this.state.page === 0 ? filler :
-              React.createElement(Arrow, {
-                id: "react-shift-previous-page", 
-                label: this.props.arrowLabels.previous, 
-                on_click: this.previous})
-          , rightArrow =
-           this.state.page === this.state.pageCount ? filler :
-            React.createElement(Arrow, {
-              id: "react-shift-next-page", 
-              label: this.props.arrowLabels.next, 
-              on_click: this.next})
-          , pagination =
-            React.createElement("span", {
-              key: "react-shift-page-numbers", 
-              id: "react-shift-pagination", 
-              className: "react-shift-pagination"}, 
-              paginationArray.map(function(n) {
-                return n == self.state.page ? React.createElement("a", {key: "currentPage-" + self.state.page, id: "page-" + n, className: "react-shift-page-number react-shift-current-page", href: "#"}, n + 1) : React.createElement("a", {key: "page" + n, id: "page-" + n, className: "react-shift-page-number", href: "#", onClick: self.setPage.bind(null, n)}, n + 1)
-              })
-            )
-
-          if (this.props.fastLinks) {
-            var fastLinksList =
-              React.createElement("div", {id: "react-shift-fast-links"}, 
-                Object.keys(fastLinks).map(function(i, v) {
-                  return React.createElement("a", {
-                    key: "fastLink" + i, 
-                    className: "react-shift-fast-link", 
-                    href: "#", 
-                    onClick: self.setPage.bind(null, fastLinks[i])}, 
-                      Object.keys(fastLinks)[v]
-                  )
-                })
-              )
-          } else {
-            var fastLinksList
+        var contentStyle = {
+            position: "Absolute"
+            , margin: "0 auto auto"
+            , padding: "10px"
+            , right: 0
+            , left: 0
+            , width: "50%"
+            , background: "#F8F8FF"
+            , borderRadius: "6px"
+            , boxShadow: "1px 1px 2px #bfbfbf"
           }
-      return (
-        React.createElement("div", {
-          key: "react-shift", 
-          id: "react-shift-wrapper", 
-          onWheelCapture: this.handleWheel, 
-          onTouchMove: this.handleTouch}, 
-          React.createElement("div", {id: "react-shift-page"}, 
-            this.props.transitions ?
-              React.createElement(ReactCSSTransitionGroup, {transitionName: "react-shift-page"}, 
-                this.props.children[this.state.page]
+          , xOutDivStyle = {
+            width: "auto"
+            , textAlign: "right"
+          }
+          , xOutStyle = {
+            fontFamily: "Helvetica"
+            , textDecoration: "none"
+          }
+        if (this.state.opened) {
+          var content =
+              React.createElement("div", null, 
+                React.createElement("div", {style: contentStyle, className: "react-pop-content"}, 
+                  React.createElement("div", {className: "react-pop-xout", style: xOutDivStyle}, 
+                    React.createElement("a", {className: "react-pop-xout", style: xOutStyle, onClick: this.toggle, href: "#"}, 
+                      this.props.xOut
+                    )
+                  ), 
+                  this.props.children
+                )
               )
-            : this.props.children[this.state.page]
-          ), 
-          React.createElement("nav", {id: "react-shift-navigation"}, 
-            fastLinksList, 
-            leftArrow, pagination, rightArrow
-          )
+            , label = this.props.labelClose
+      } else {
+        var content = null
+            , label = this.props.labelOpen
+      }
+      return (
+        React.createElement("div", {className: "react-pop-wrapper"}, 
+          React.createElement(Toggle, {label: label, on_click: this.toggle}), 
+          this.props.transitions ?
+            React.createElement(ReactCSSTransitionGroup, {transitionName: "react-pop-content"}, 
+              content
+            )
+          : content
         )
       )
     }
   })
 
-module.exports = Shift
+module.exports = Pop

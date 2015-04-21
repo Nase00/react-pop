@@ -25,4 +25,13 @@ React.render(
 The component can be customized by passing these objects.
 * ```labelOpen``` String.
 * ```labelClose``` String.
+* ```xOut``` String.
 * ```transitions``` Boolean.
+
+## Styling
+```css
+div.react-pop-xout {
+}
+a.react-pop-xout {
+}
+```

@@ -5,7 +5,7 @@ var React = require('react')
 		, Pop = require('./react-pop.jsx')
 
 React.render(
-  React.createElement(Pop, {labelOpen: "FAQ", labelClose: "FAQ close", transitions: true}, 
+  React.createElement(Pop, {xOut: "Close", labelOpen: "FAQ", labelClose: "FAQ close", transitions: true}, 
   	React.createElement("div", null, 
 			"Vestibulum interdum dapibus iaculis. Pellentesque a condimentum erat, non tempus erat. Sed pellentesque, arcu eget tristique facilisis, sapien ligula pharetra tellus, at malesuada nisl diam nec purus. Morbi aliquam ante erat, nec hendrerit enim malesuada vel. Sed in lorem quis enim aliquam consectetur eu nec leo. Nulla facilisi. Aenean malesuada risus sed tortor aliquam maximus."
 		)
@@ -21798,6 +21798,7 @@ var Pop = React.createClass({displayName: "Pop",
       opened: React.PropTypes.bool
       , labelOpen: React.PropTypes.string
       , labelClose: React.PropTypes.string
+      , xOut: React.PropTypes.string
       , transitions: React.PropTypes.bool
     }
     , getDefaultProps: function() {
@@ -21805,6 +21806,7 @@ var Pop = React.createClass({displayName: "Pop",
         opened: false
         , labelOpen: "Toggle"
         , labelClose: "Toggle"
+        , xOut: "Close"
         , transitions: false
       }
     }
@@ -21823,8 +21825,24 @@ var Pop = React.createClass({displayName: "Pop",
       this.setState({opened: !this.state.opened})
     }
     , render: function() {
+      var xOutDivStyle = {
+        width: "100%"
+        , textAlign: "right"
+      }
+      , xOutStyle = {
+        fontFamily: "Helvetica"
+        , textDecoration: "none"
+      }
       if (this.state.opened) {
-        var content = this.props.children
+        var content =
+                React.createElement("div", null, 
+                  React.createElement("div", {className: "react-pop-xout", style: xOutDivStyle}, 
+                    React.createElement("a", {className: "react-pop-xout", style: xOutStyle, onClick: this.toggle, href: "#"}, 
+                      this.props.xOut
+                    )
+                  ), 
+                  this.props.children
+                )
             , label = this.props.labelClose
       } else {
         var content = null

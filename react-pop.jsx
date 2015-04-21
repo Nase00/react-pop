@@ -18,6 +18,7 @@ var Pop = React.createClass({
       opened: React.PropTypes.bool
       , labelOpen: React.PropTypes.string
       , labelClose: React.PropTypes.string
+      , xOut: React.PropTypes.string
       , transitions: React.PropTypes.bool
     }
     , getDefaultProps: function() {
@@ -25,6 +26,7 @@ var Pop = React.createClass({
         opened: false
         , labelOpen: "Toggle"
         , labelClose: "Toggle"
+        , xOut: "Close"
         , transitions: false
       }
     }
@@ -43,8 +45,24 @@ var Pop = React.createClass({
       this.setState({opened: !this.state.opened})
     }
     , render: function() {
+      var xOutDivStyle = {
+        width: "100%"
+        , textAlign: "right"
+      }
+      , xOutStyle = {
+        fontFamily: "Helvetica"
+        , textDecoration: "none"
+      }
       if (this.state.opened) {
-        var content = this.props.children
+        var content =
+                <div>
+                  <div className="react-pop-xout" style={xOutDivStyle}>
+                    <a className="react-pop-xout" style={xOutStyle} onClick={this.toggle} href="#">
+                      {this.props.xOut}
+                    </a>
+                  </div>
+                  {this.props.children}
+                </div>
             , label = this.props.labelClose
       } else {
         var content = null

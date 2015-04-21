@@ -25,3 +25,4 @@ React.render(
 The component can be customized by passing these objects.
 * ```labelOpen``` String.
 * ```labelClose``` String.
+* ```transitions``` Boolean.

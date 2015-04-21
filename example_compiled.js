@@ -5,7 +5,7 @@ var React = require('react')
 		, Pop = require('./react-pop.jsx')
 
 React.render(
-  React.createElement(Pop, {labelOpen: "FAQ", labelClose: "FAQ close"}, 
+  React.createElement(Pop, {labelOpen: "FAQ", labelClose: "FAQ close", transitions: true}, 
   	React.createElement("div", null, 
 			"Vestibulum interdum dapibus iaculis. Pellentesque a condimentum erat, non tempus erat. Sed pellentesque, arcu eget tristique facilisis, sapien ligula pharetra tellus, at malesuada nisl diam nec purus. Morbi aliquam ante erat, nec hendrerit enim malesuada vel. Sed in lorem quis enim aliquam consectetur eu nec leo. Nulla facilisi. Aenean malesuada risus sed tortor aliquam maximus."
 		)
@@ -21798,12 +21798,14 @@ var Pop = React.createClass({displayName: "Pop",
       opened: React.PropTypes.bool
       , labelOpen: React.PropTypes.string
       , labelClose: React.PropTypes.string
+      , transitions: React.PropTypes.bool
     }
     , getDefaultProps: function() {
       return {
         opened: false
         , labelOpen: "Toggle"
         , labelClose: "Toggle"
+        , transitions: false
       }
     }
     , getInitialState: function() {
@@ -21821,7 +21823,6 @@ var Pop = React.createClass({displayName: "Pop",
       this.setState({opened: !this.state.opened})
     }
     , render: function() {
-      console.log(this.props)
       if (this.state.opened) {
         var content = this.props.children
             , label = this.props.labelClose
@@ -21833,7 +21834,11 @@ var Pop = React.createClass({displayName: "Pop",
         React.createElement("div", {className: "react-pop-wrapper"}, 
           React.createElement(Toggle, {label: label, on_click: this.toggle}), 
           React.createElement("div", {className: "react-pop-content"}, 
-            content
+            this.props.transitions ?
+              React.createElement(ReactCSSTransitionGroup, {transitionName: "react-pop-content"}, 
+                content
+              )
+            : content
           )
         )
       )

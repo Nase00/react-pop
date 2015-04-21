@@ -18,12 +18,14 @@ var Pop = React.createClass({
       opened: React.PropTypes.bool
       , labelOpen: React.PropTypes.string
       , labelClose: React.PropTypes.string
+      , transitions: React.PropTypes.bool
     }
     , getDefaultProps: function() {
       return {
         opened: false
         , labelOpen: "Toggle"
         , labelClose: "Toggle"
+        , transitions: false
       }
     }
     , getInitialState: function() {
@@ -41,7 +43,6 @@ var Pop = React.createClass({
       this.setState({opened: !this.state.opened})
     }
     , render: function() {
-      console.log(this.props)
       if (this.state.opened) {
         var content = this.props.children
             , label = this.props.labelClose
@@ -53,7 +54,11 @@ var Pop = React.createClass({
         <div className="react-pop-wrapper">
           <Toggle label={label} on_click={this.toggle} />
           <div className="react-pop-content">
-            {content}
+            {this.props.transitions ?
+              <ReactCSSTransitionGroup transitionName="react-pop-content">
+                {content}
+              </ReactCSSTransitionGroup>
+            : content}
           </div>
         </div>
       )
